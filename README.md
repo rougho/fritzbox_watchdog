@@ -22,32 +22,15 @@ Automated network monitoring tool that restarts your FritzBox router when intern
 
 ### 1. Download and Install
 ```bash
-git clone https://github.com/yourusername/fritzbox-watchdog.git
+git clone https://github.com/rougho/fritzbox_watchdog.git
 cd fritzbox-watchdog
 chmod +x install.sh
 ./install.sh
 ```
 
 ### 2. Installation Process
-The installer will:
-1. **Test router credentials** - Validates connection before installation
-2. **Install system dependencies** - Python packages and ping utility
-3. **Create system user** - `fritzbox-watchdog` user for security
-4. **Setup service** - Systemd service for automatic startup
-5. **Configure logging** - Log directory with proper permissions
 
-### 3. What Gets Created
-```
-/opt/fritzbox-watchdog/           # Application files
-/etc/fritzbox-watchdog/.env       # Configuration file
-/var/log/fritzbox-watchdog/       # Log files
-/usr/local/bin/fritzbox-watchdog  # Command-line tool
-/usr/local/bin/fwd                # Short alias command
-```
-
-## Configuration
-
-### Router Settings (Required)
+## Router Settings (Required)
 ```bash
 # Edit configuration
 nano /opt/fritzbox-watchdog/.env
@@ -68,11 +51,27 @@ MAX_RESTARTS_BEFORE_COOLDOWN=3
 COOLDOWN_HOURS=12
 ```
 
-### Enable TR-064 on FritzBox
+## Enable TR-064 on FritzBox
 1. Open FritzBox web interface (`http://192.168.1.1`)
 2. Go to **Home Network** → **Network** → **Network Settings**
 3. Enable **Allow access for applications** (TR-064 protocol)
 4. Create admin user with **Smart Home** permissions
+
+The installer will:
+1. **Test router credentials** - Validates connection before installation
+2. **Install system dependencies** - Python packages and ping utility
+3. **Create system user** - `fritzbox-watchdog` user for security
+4. **Setup service** - Systemd service for automatic startup
+5. **Configure logging** - Log directory with proper permissions
+
+### 3. What Gets Created
+```
+/opt/fritzbox-watchdog/           # Application files
+/etc/fritzbox-watchdog/.env       # Configuration file
+/var/log/fritzbox-watchdog/       # Log files
+/usr/local/bin/fritzbox-watchdog  # Command-line tool
+/usr/local/bin/fwd                # Short alias command
+```
 
 ## Usage
 
