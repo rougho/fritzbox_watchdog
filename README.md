@@ -197,4 +197,5 @@ sudo systemctl daemon-reload
 
 ## License
 
-MIT License - see LICENSE file for details.
+Proprietary Freeware License - Free to use and distribute, but no modifications allowed.
+See LICENSE file for full terms.
