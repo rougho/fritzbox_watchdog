@@ -1,0 +1,21 @@
+# Include essential documentation and configuration files
+include README.md
+include LICENSE
+include .env.template
+
+# Include all Python files
+recursive-include watchdog *.py
+recursive-include tests *.py
+
+# Exclude development and build artifacts
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .DS_Store
+global-exclude *.so
+global-exclude .env
+prune build
+prune dist
+prune *.egg-info

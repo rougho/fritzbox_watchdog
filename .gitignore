@@ -1,0 +1,67 @@
+# Environment files containing sensitive data
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+
+# Python build and distribution files
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+test_venv/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.vim
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Log files (development only - production logs stay in /var/log/)
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Test coverage and reports
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+
+# Documentation build
+docs/_build/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Local configuration overrides
+config.local.*
