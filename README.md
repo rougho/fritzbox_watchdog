@@ -30,7 +30,7 @@ chmod +x install.sh
 
 ### 2. Installation Process
 
-## Router Settings (Required)
+#### Router Settings (Required)
 ```bash
 # Edit configuration
 nano /opt/fritzbox-watchdog/.env
@@ -51,7 +51,7 @@ MAX_RESTARTS_BEFORE_COOLDOWN=3
 COOLDOWN_HOURS=12
 ```
 
-## Enable TR-064 on FritzBox
+#### Enable TR-064 on FritzBox
 1. Open FritzBox web interface (`http://192.168.1.1`)
 2. Go to **Home Network** → **Network** → **Network Settings**
 3. Enable **Allow access for applications** (TR-064 protocol)
