@@ -1,0 +1,6 @@
+#!/bin/bash
+# Pre-removal script
+
+# Stop service before removal
+systemctl stop fritzbox-watchdog 2>/dev/null || true
+systemctl disable fritzbox-watchdog 2>/dev/null || true

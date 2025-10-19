@@ -1,0 +1,13 @@
+# Exclude files from .deb package
+.git
+.gitignore
+setup.py
+MANIFEST.in
+tests
+.env
+.env.template
+*.pyc
+__pycache__
+build
+dist
+*.egg-info

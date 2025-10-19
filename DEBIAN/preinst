@@ -1,0 +1,4 @@
+#!/bin/bash
+# Pre-installation script
+
+echo "Preparing FritzBox Watchdog installation..."

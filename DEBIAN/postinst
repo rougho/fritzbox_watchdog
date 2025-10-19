@@ -1,0 +1,142 @@
+#!/bin/bash
+# Post-installation script
+
+# Create system user
+adduser --system --home /opt/fritzbox-watchdog --shell /bin/false \
+        --no-create-home --group --disabled-password \
+        --gecos "FritzBox Watchdog Service" fritzbox-watchdog 2>/dev/null || true
+
+# Create directories
+mkdir -p /opt/fritzbox-watchdog
+mkdir -p /etc/fritzbox-watchdog
+mkdir -p /var/log/fritzbox-watchdog
+
+# Copy application files to /opt from package directory
+cp -r ./watchdog /opt/fritzbox-watchdog/
+
+# Create command wrappers
+cat > /usr/local/bin/fritzbox-watchdog << 'EOF'
+#!/bin/bash
+cd /opt/fritzbox-watchdog
+exec python3 -m watchdog.main "$@"
+EOF
+
+cat > /usr/local/bin/fwd << 'EOF'
+#!/bin/bash
+cd /opt/fritzbox-watchdog
+exec python3 -m watchdog.main "$@"
+EOF
+
+chmod +x /usr/local/bin/fritzbox-watchdog
+chmod +x /usr/local/bin/fwd
+
+# Create default configuration file
+cat > /etc/fritzbox-watchdog/.env << 'EOF'
+# FritzBox Router Configuration
+FRITZBOX_HOST=192.168.1.1
+FRITZBOX_PORT=49000
+FRITZBOX_USERNAME=admin
+FRITZBOX_PASSWORD=changeme
+
+# Monitoring Settings
+CHECK_INTERVAL_MINUTES=1
+MAX_FAILURES=2
+RESTART_WAIT_MINUTES=3
+MAX_RESTARTS_BEFORE_COOLDOWN=3
+COOLDOWN_HOURS=12
+EOF
+
+# Set permissions
+chown -R fritzbox-watchdog:fritzbox-watchdog /opt/fritzbox-watchdog
+chown -R fritzbox-watchdog:fritzbox-watchdog /var/log/fritzbox-watchdog
+chown root:fritzbox-watchdog /etc/fritzbox-watchdog
+chmod 755 /etc/fritzbox-watchdog
+chmod 644 /etc/fritzbox-watchdog/.env
+
+# Install systemd service
+if [ -f /tmp/fritzbox-watchdog-install/fritzbox-watchdog.service ]; then
+    cp /tmp/fritzbox-watchdog-install/fritzbox-watchdog.service /lib/systemd/system/
+elif [ -f ./fritzbox-watchdog.service ]; then
+    cp ./fritzbox-watchdog.service /lib/systemd/system/
+fi
+systemctl daemon-reload
+
+# Ask for FritzBox configuration during installation
+echo ""
+echo "FritzBox Watchdog Configuration"
+echo "=================================="
+echo ""
+echo "Router Connection Settings:"
+echo ""
+
+# Router settings
+read -p "FritzBox IP address (default: 192.168.1.1): " FB_HOST
+FB_HOST=${FB_HOST:-192.168.1.1}
+
+read -p "FritzBox TR-064 Port (default: 49000): " FB_PORT  
+FB_PORT=${FB_PORT:-49000}
+
+read -p "FritzBox Username: " FB_USER
+while [ -z "$FB_USER" ]; do
+    read -p "Username is required: " FB_USER
+done
+
+echo -n "FritzBox Password: "
+read -s FB_PASS
+echo ""
+while [ -z "$FB_PASS" ]; do
+    echo -n "Password is required: "
+    read -s FB_PASS
+    echo ""
+done
+
+echo ""
+echo "Monitoring Settings:"
+echo ""
+
+read -p "Check interval in minutes (default: 1): " CHECK_INTERVAL
+CHECK_INTERVAL=${CHECK_INTERVAL:-1}
+
+read -p "Max consecutive failures before restart (default: 2): " MAX_FAILURES
+MAX_FAILURES=${MAX_FAILURES:-2}
+
+read -p "Wait time after restart in minutes (default: 3): " RESTART_WAIT
+RESTART_WAIT=${RESTART_WAIT:-3}
+
+read -p "Max restarts before cooldown (default: 3): " MAX_RESTARTS
+MAX_RESTARTS=${MAX_RESTARTS:-3}
+
+read -p "Cooldown period in hours (default: 12): " COOLDOWN_HOURS
+COOLDOWN_HOURS=${COOLDOWN_HOURS:-12}
+
+# Create configuration file with user settings
+cat > /etc/fritzbox-watchdog/.env << EOF
+# FritzBox Router Configuration
+FRITZBOX_HOST=$FB_HOST
+FRITZBOX_PORT=$FB_PORT
+FRITZBOX_USERNAME=$FB_USER
+FRITZBOX_PASSWORD=$FB_PASS
+
+# Monitoring Settings
+CHECK_INTERVAL_MINUTES=$CHECK_INTERVAL
+MAX_FAILURES=$MAX_FAILURES
+RESTART_WAIT_MINUTES=$RESTART_WAIT
+MAX_RESTARTS_BEFORE_COOLDOWN=$MAX_RESTARTS
+COOLDOWN_HOURS=$COOLDOWN_HOURS
+EOF
+
+chmod 644 /etc/fritzbox-watchdog/.env
+chown root:root /etc/fritzbox-watchdog/.env
+
+echo ""
+echo "Configuration saved!"
+
+# Enable and start service automatically
+systemctl enable --now fritzbox-watchdog
+
+echo ""
+echo "FritzBox Watchdog is now running!"
+echo ""
+echo "Commands: fritzbox-watchdog --help, fwd --status"
+echo "Logs: sudo journalctl -u fritzbox-watchdog -f"
+echo ""

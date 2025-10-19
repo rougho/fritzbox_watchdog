@@ -1,0 +1,11 @@
+Package: fritzbox-watchdog
+Version: 1.0.0
+Section: net
+Priority: optional
+Architecture: all
+Depends: python3, iputils-ping, systemd
+Maintainer: rgho <rohi@rgho.de>
+Description: Automated FritzBox router restart when internet fails
+ FritzBox Router Watchdog monitors internet connectivity and restarts
+ your FritzBox router when connection fails. Simple systemd service
+ with configurable thresholds and cooldown protection.

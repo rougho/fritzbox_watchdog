@@ -1,0 +1,24 @@
+#!/bin/bash
+# Post-removal script
+
+# Remove commands
+rm -f /usr/local/bin/fritzbox-watchdog
+rm -f /usr/local/bin/fwd
+
+# Remove systemd service file
+rm -f /lib/systemd/system/fritzbox-watchdog.service
+systemctl daemon-reload 2>/dev/null || true
+
+# On purge, remove everything
+if [ "$1" = "purge" ]; then
+    # Remove directories
+    rm -rf /opt/fritzbox-watchdog
+    rm -rf /etc/fritzbox-watchdog  
+    rm -rf /var/log/fritzbox-watchdog
+    
+    # Remove system user
+    userdel fritzbox-watchdog 2>/dev/null || true
+    groupdel fritzbox-watchdog 2>/dev/null || true
+    
+    echo "FritzBox Watchdog completely removed"
+fi
