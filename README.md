@@ -20,35 +20,10 @@ Automated network monitoring tool that restarts your FritzBox router when intern
 
 ## Installation
 
-### 1. Download and Install
-```bash
-git clone https://github.com/rougho/fritzbox_watchdog.git
-cd fritzbox-watchdog
-chmod +x install.sh
-./install.sh
-```
-
-### 2. Installation Process
-
-#### Router Settings (Required)
+### 1. Router Settings (Required)
 ```bash
 # Edit configuration
 nano /opt/fritzbox-watchdog/.env
-```
-
-```properties
-# FritzBox Router Configuration
-FRITZBOX_HOST=192.168.1.1
-FRITZBOX_PORT=49000
-FRITZBOX_USERNAME=your_username
-FRITZBOX_PASSWORD=your_password
-
-# Monitoring Settings
-CHECK_INTERVAL_MINUTES=1
-MAX_FAILURES=2
-RESTART_WAIT_MINUTES=3
-MAX_RESTARTS_BEFORE_COOLDOWN=3
-COOLDOWN_HOURS=12
 ```
 
 #### Enable TR-064 on FritzBox
@@ -57,6 +32,16 @@ COOLDOWN_HOURS=12
 3. Enable **Allow access for applications** (TR-064 protocol)
 4. Create admin user with **Smart Home** permissions
 
+### 2. Download and Install
+```bash
+git clone https://github.com/rougho/fritzbox_watchdog.git
+cd fritzbox-watchdog
+chmod +x install.sh
+./install.sh
+```
+
+### 3. Installation Process
+
 The installer will:
 1. **Test router credentials** - Validates connection before installation
 2. **Install system dependencies** - Python packages and ping utility
@@ -64,7 +49,7 @@ The installer will:
 4. **Setup service** - Systemd service for automatic startup
 5. **Configure logging** - Log directory with proper permissions
 
-### 3. What Gets Created
+### 4. What Gets Created
 ```
 /opt/fritzbox-watchdog/           # Application files
 /etc/fritzbox-watchdog/.env       # Configuration file
