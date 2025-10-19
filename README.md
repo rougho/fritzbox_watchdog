@@ -20,13 +20,7 @@ Automated network monitoring tool that restarts your FritzBox router when intern
 
 ## Installation
 
-### 1. Router Settings (Required)
-```bash
-# Edit configuration
-nano /opt/fritzbox-watchdog/.env
-```
-
-#### Enable TR-064 on FritzBox
+### 1. Enable TR-064 on FritzBox
 1. Open FritzBox web interface (`http://192.168.1.1`)
 2. Go to **Home Network** → **Network** → **Network Settings**
 3. Enable **Allow access for applications** (TR-064 protocol)
